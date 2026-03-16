@@ -15,7 +15,10 @@ import zipfile
 from pathlib import Path
 import urllib.request
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, 
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 LIAR_URL = "https://www.cs.ucsb.edu/~william/data/liar_dataset.zip"
