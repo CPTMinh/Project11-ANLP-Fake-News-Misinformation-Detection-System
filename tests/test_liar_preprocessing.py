@@ -106,14 +106,12 @@ class TestMapLabels:
     def test_fake_labels_map_to_0(self):
         df = pd.DataFrame([{"label": lbl, "statement": "test"} | {c: "0" for c in CREDIT_COLUMNS}
                            for lbl in ["pants-fire", "false", "barely-true"]])
-        df = handle_missing(df)
         result = map_labels(df)
         assert all(result["label_binary"] == 0)
 
     def test_real_labels_map_to_1(self):
         df = pd.DataFrame([{"label": lbl, "statement": "test"} | {c: "0" for c in CREDIT_COLUMNS}
                            for lbl in ["half-true", "mostly-true", "true"]])
-        df = handle_missing(df)
         result = map_labels(df)
         assert all(result["label_binary"] == 1)
 
