@@ -1,0 +1,19 @@
+# Data files
+data/raw/*.csv
+data/raw/*.tsv
+data/processed/*.csv
+data/processed/*.tsv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
