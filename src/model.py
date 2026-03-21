@@ -155,7 +155,7 @@ NUMERIC_FEATURES = [
     "is_political_context",
 ]
 
-CATEGORICAL_FEATURES = ["party", "speaker_job", "state_info"]
+CATEGORICAL_FEATURES = ["party"]
 
 
 class LIARDataset(Dataset):

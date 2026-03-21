@@ -234,8 +234,8 @@ def train(
 
     error_analysis(
         df=df_test,
-        y_true=test_metrics["predictions"],   # intentionally swapped for diff perspective
-        y_pred=test_metrics["labels"],
+        y_true=test_metrics["labels"],   # intentionally swapped for diff perspective
+        y_pred=test_metrics["predictions"],
         output_path=str(output_dir / "error_analysis.csv"),
     )
 
