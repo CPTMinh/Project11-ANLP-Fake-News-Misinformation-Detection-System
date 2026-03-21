@@ -32,6 +32,7 @@ from sklearn.metrics import (
 )
 
 from model import RoBERTaWithMetadata, LIARDataset
+import model
 
 logging.basicConfig(
     level=logging.INFO,
@@ -169,6 +170,11 @@ def train(
         freeze_base=freeze_base,
     ).to(device)
 
+    # Resume from checkpoint if specified
+    if args.resume_from:
+        model.load_state_dict(torch.load(args.resume_from, map_location=torch.device))
+        logger.info("Resumed from checkpoint: %s", args.resume_from)
+
     # Optimiser + scheduler
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=lr, weight_decay=weight_decay
@@ -292,6 +298,8 @@ if __name__ == "__main__":
                     help="Fraction of total steps used for linear warmup")
     parser.add_argument("--freeze_base", action="store_true",
                         help="Freeze RoBERTa weights, train only the head")
+    parser.add_argument("--resume_from", type=str, default=None,
+                    help="Path to a best_model.pt checkpoint to resume from")
     args = parser.parse_args()
 
     train(
