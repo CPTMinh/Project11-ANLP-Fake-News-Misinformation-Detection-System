@@ -288,8 +288,6 @@ if __name__ == "__main__":
     parser.add_argument("--dropout",     type=float, default=0.1)
     parser.add_argument("--max_length",  type=int,   default=128)
     parser.add_argument("--weight_decay",type=float, default=0.01)
-    parser.add_argument("--warmup_ratio",  type=float, default=0.1,
-                    help="Fraction of total steps used for linear warmup")
     parser.add_argument("--freeze_base", action="store_true",
                         help="Freeze RoBERTa weights, train only the head")
     args = parser.parse_args()
@@ -305,6 +303,5 @@ if __name__ == "__main__":
         dropout=args.dropout,
         max_length=args.max_length,
         weight_decay=args.weight_decay,
-        warmup_ratio=args.warmup_ratio,
         freeze_base=args.freeze_base,
     )
