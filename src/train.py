@@ -132,7 +132,6 @@ def train(
     dropout: float = 0.1,
     max_length: int = 128,
     weight_decay: float = 0.01,
-    resume_from: str | None = None,
     freeze_base: bool = False,
 ) -> dict:
     output_dir = Path(output_dir)
@@ -315,6 +314,5 @@ if __name__ == "__main__":
         max_length=args.max_length,
         weight_decay=args.weight_decay,
         warmup_ratio=args.warmup_ratio,
-        resume_from=args.resume_from, 
         freeze_base=args.freeze_base,
     )
