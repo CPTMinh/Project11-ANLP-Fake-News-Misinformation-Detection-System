@@ -1,0 +1,21 @@
+statement,true_label,predicted_label,label,statement_len,speaker_lie_rate,party,speaker,context
+Building a wall on the U.S.-Mexico border will take literally years.,1,0,true,11,0.3356643356643357,republican,rick-perry,radio interview
+Wisconsin is on pace to double the number of layoffs this year.,0,1,false,12,0.3333333333333333,democrat,katrina-shankland,a news conference
+Suzanne Bonamici supports a plan that will cut choice for Medicare Advantage seniors.,1,0,half-true,13,0.2857142857142857,republican,rob-cornilles,a radio show
+We know there are more Democrats in Georgia than Republicans. We know that for a fact.,0,1,barely-true,16,0.0,democrat,mike-berlon,an article
+"Says 57 percent of federal spending goes to the military and just 1 percent goes to food and agriculture, including food stamps.",0,1,false,22,0.574468085106383,none,facebook-posts,a meme on social media
+"Each year, 18,000 people die in America because they don't have health care.",1,0,true,13,0.1628959276018099,democrat,hillary-clinton,"a speech in des moines, iowa."
+Ronald Reagan faced an even worse recession than the current one.,0,1,false,11,0.5102040816326531,republican,sarah-palin,"her book, going rogue"
+There have not been any public safety issues in cities that allow transgender people to use the bathroom of the gender they identify as.,1,0,mostly-true,24,0.5,activist,chris-sgro,a speech urging charlotte's anti-discrimination ordinance be left intact
+"Now, there was a time when someone like Scalia and Ginsburg got 95-plus votes.",1,0,true,14,0.2,republican,lindsey-graham,a senate hearing
+I was gone when there was a red line against Syria.,0,1,barely-true,11,0.1628959276018099,democrat,hillary-clinton,the second presidential debate
+"Tim Kaine hiked tuition as governor, but now claims to champion affordability.",1,0,half-true,12,0.2666666666666666,republican,republican-national-committee-republican,a blog post.
+"Contends that President Obama literally said (if) his cap-and-trade proposals were to pass, that utility rates, his words now, would, necessarily skyrocket.",1,0,true,22,0.2857142857142857,republican,mike-pence,msnbc interview.
+Its been since 1888 that a Senate of a different party than the president in the White House confirmed a Supreme Court nominee.,0,1,false,23,0.2,republican,cory-gardner,a talk show
+"Under Rosemary Lehmberg, the Travis County D.A.s office convened the grand jury that indicted Rick Perry.",0,1,false,16,0.5102040816326531,republican,sarah-palin,a commentary
+On which team hes rooting for in the World Series.,1,0,half-true,10,0.1691331923890063,democrat,barack-obama,unknown
+"Says Thomas Jefferson said, You might be able to fool the people for awhile, and they may go astray, but sooner or later the American people are going to wake up and they will correct the course.",1,0,half-true,37,0.5384615384615384,republican,herman-cain,a video on cain tv
+"In Massachusetts, Scott Brown pushed for a law to force women considering abortion -- force them -- to look at color photographs of developing fetuses.",1,0,mostly-true,25,0.0,democrat,jeanne-shaheen,an ad
+"The Fed created $1.2 trillion out of nothing, gave it to banks, and some of them foreign banks, so that they could stabilize their operations.",1,0,true,25,0.2142857142857142,democrat,dennis-kucinich,a television interview
+"Greg Abbott activated the state guard to monitor Jade Helm 15 in case the troops try to impose martial law, disarm innocent Texans, and detain them in tunnels beneath closed Walmart stores.",1,0,half-true,32,0.0,none,doonesbury,the strip about greg abbott and the jade helm military exercise
+Says he won the second debate with Hillary Clinton in a landslide in every poll.,0,1,pants-fire,15,0.5368098159509203,republican,donald-trump,a tweet
