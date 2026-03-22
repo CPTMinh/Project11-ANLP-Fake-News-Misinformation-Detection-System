@@ -17,3 +17,9 @@ venv/
 
 # Testing
 .pytest_cache/
+
+# Trained model files and tokenizers
+models/roberta_best/model.safetensors
+models/roberta_best/training_args.bin
+models/roberta_best/tokenizer.json
+models/roberta_best/tokenizer_config.json
