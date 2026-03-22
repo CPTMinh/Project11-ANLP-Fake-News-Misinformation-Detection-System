@@ -1,0 +1,46 @@
+# configs/baseline_config.yaml
+# Hyperparameter configuration for TF-IDF baseline models
+# Used by src/baseline_model.py
+
+data:
+  processed_dir: "data/processed"
+  train_file: "train_processed.csv"
+  valid_file: "valid_processed.csv"
+  test_file: "test_processed.csv"
+  text_column: "statement_clean"
+  label_column: "label_binary"
+
+output:
+  models_dir: "models"
+  results_dir: "models/baseline_results"
+
+# TF-IDF + Logistic Regression hyperparameter grid
+logistic_regression:
+  tfidf:
+    ngram_range:
+      - [1, 1]  # unigrams
+      - [1, 2]  # unigrams + bigrams
+    max_features: [10000, 50000]
+    sublinear_tf: [true]
+  classifier:
+    C: [0.1, 1.0, 10.0]
+    max_iter: [1000]
+    solver: ["lbfgs"]
+  cv_folds: 5
+  scoring: "f1_macro"
+  n_jobs: -1   # use all available CPU cores
+
+# TF-IDF + LinearSVC hyperparameter grid
+svm:
+  tfidf:
+    ngram_range:
+      - [1, 1]
+      - [1, 2]
+    max_features: [10000, 50000]
+    sublinear_tf: [true]
+  classifier:
+    C: [0.01, 0.1, 1.0]
+    max_iter: [2000]
+  cv_folds: 5
+  scoring: "f1_macro"
+  n_jobs: -1

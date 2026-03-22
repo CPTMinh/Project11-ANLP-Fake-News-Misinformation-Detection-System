@@ -1,0 +1,45 @@
+# configs/roberta_config.yaml
+# Hyperparameter configuration for RoBERTa fine-tuning
+# Used by src/roberta_train.py  (GPU required — run via Google Colab)
+
+model:
+  name: "roberta-base"          # HuggingFace model ID
+  num_labels: 2                 # binary classification: 0=fake, 1=real
+  max_length: 128               # max token length for statement truncation
+  dropout: 0.1                  # classifier head dropout
+
+training:
+  batch_size: 16                # per-device train batch size
+  eval_batch_size: 32           # per-device eval batch size
+  num_epochs: 4
+  learning_rate: 2.0e-5
+  warmup_ratio: 0.1             # fraction of steps for LR warmup
+  weight_decay: 0.01            # AdamW weight decay
+  gradient_accumulation_steps: 1
+  fp16: true                    # mixed-precision (requires GPU)
+  seed: 42
+
+  # Early stopping
+  early_stopping_patience: 2
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_f1"
+  greater_is_better: true
+
+data:
+  processed_dir: "data/processed"
+  train_file: "train_processed.csv"
+  valid_file: "valid_processed.csv"
+  test_file: "test_processed.csv"
+  text_column: "statement_clean"
+  label_column: "label_binary"
+
+output:
+  checkpoint_dir: "models/roberta_checkpoints"
+  best_model_dir: "models/roberta_best"
+  results_dir: "models/roberta_results"
+  logging_dir: "models/roberta_logs"
+
+# Logging frequency (steps)
+logging_steps: 100
+eval_steps: 500
+save_steps: 500
