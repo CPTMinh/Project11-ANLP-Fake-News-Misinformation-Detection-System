@@ -92,13 +92,23 @@ def _build_param_grid(model_cfg: dict, prefix_tfidf: str, prefix_clf: str) -> li
 
     prefix_tfidf : e.g. 'tfidf__'
     prefix_clf   : e.g. 'clf__'
+
+    Note: YAML loads sequences as Python lists, but sklearn expects tuples
+    for parameters like ngram_range. Any list-of-lists value is converted
+    to a list-of-tuples here.
     """
+    def _coerce(v):
+        """Convert a list value to a tuple (handles nested lists like ngram_range)."""
+        if isinstance(v, list):
+            return [tuple(item) if isinstance(item, list) else item for item in v]
+        return v
+
     tfidf_params = {
-        f"{prefix_tfidf}{k}": v
+        f"{prefix_tfidf}{k}": _coerce(v)
         for k, v in model_cfg["tfidf"].items()
     }
     clf_params = {
-        f"{prefix_clf}{k}": v
+        f"{prefix_clf}{k}": _coerce(v)
         for k, v in model_cfg["classifier"].items()
     }
     return [{**tfidf_params, **clf_params}]

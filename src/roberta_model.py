@@ -174,12 +174,17 @@ def load_model(
     )
 
     # Try safetensors first, then .bin
-    safetensors_path = checkpoint_dir / "pytorch_model.safetensors"
-    bin_path         = checkpoint_dir / "pytorch_model.bin"
+    safetensors_path1 = checkpoint_dir / "pytorch_model.safetensors"
+    safetensors_path2 = checkpoint_dir / "model.safetensors"
+    bin_path          = checkpoint_dir / "pytorch_model.bin"
 
-    if safetensors_path.exists():
+    if safetensors_path1.exists():
         from safetensors.torch import load_file
-        state_dict = load_file(str(safetensors_path), device=device)
+        state_dict = load_file(str(safetensors_path1), device=device)
+        model.load_state_dict(state_dict, strict=False)
+    elif safetensors_path2.exists():
+        from safetensors.torch import load_file
+        state_dict = load_file(str(safetensors_path2), device=device)
         model.load_state_dict(state_dict, strict=False)
     elif bin_path.exists():
         state_dict = torch.load(bin_path, map_location=device)
@@ -187,7 +192,7 @@ def load_model(
     else:
         raise FileNotFoundError(
             f"No model weights found in {checkpoint_dir}. "
-            "Expected pytorch_model.bin or pytorch_model.safetensors."
+            "Expected pytorch_model.bin, pytorch_model.safetensors, or model.safetensors."
         )
 
     model = model.to(device)
