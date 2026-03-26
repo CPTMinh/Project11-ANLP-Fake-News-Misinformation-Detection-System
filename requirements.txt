@@ -2,6 +2,7 @@
 # Core data processing
 pandas>=2.0
 numpy>=1.24
+requests>=2.31          # data/download_liar.py
 
 # Machine learning (baseline models)
 scikit-learn>=1.4
@@ -18,6 +19,18 @@ pyyaml>=6.0
 # Visualization & reporting
 matplotlib>=3.7
 seaborn>=0.13
+
+# REST API deployment (src/api.py)
+fastapi>=0.111
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9  # required by FastAPI for form data
+
+# Web demo (src/app.py)
+streamlit>=1.35
+
+# Agentic AI component (src/agent.py)
+wikipedia>=1.4.0        # Wikipedia search tool
+google-genai>=0.7       # Gemini LLM API client
 
 # Testing
 pytest>=8.0
