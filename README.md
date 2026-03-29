@@ -57,7 +57,7 @@ Project11-ANLP-Fake-News-Misinformation-Detection-System/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/Project11-ANLP-Fake-News-Misinformation-Detection-System.git
+git clone https://github.com/CPTMinh/Project11-ANLP-Fake-News-Misinformation-Detection-System.git
 cd Project11-ANLP-Fake-News-Misinformation-Detection-System
 ```
 
@@ -77,7 +77,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-> **Note:** For RoBERTa training you need a CUDA-capable GPU. CPU-only machines can still run inference and the baseline models.
+> **Note:** For RoBERTa training you need a CUDA-capable GPU or Google Colab. CPU-only machines can still run inference and the baseline models.
 
 ### 4. (Optional) Set Up API Key for the Agentic Component
 
@@ -118,7 +118,7 @@ Trained models are saved to `models/baseline_lr.pkl` and `models/baseline_svm.pk
 
 ### RoBERTa Fine-Tuning — GPU Required
 
-> **Recommended:** Open `notebooks/roberta_training_colab.ipynb` in [Google Colab](https://colab.research.google.com/) with a GPU runtime.
+> **Recommended:** Open `notebooks/roberta_training_colab.ipynb` in [Google Colab](https://colab.research.google.com/) with a GPU runtime (T4 GPU) and run from start to end.
 
 To train locally on a GPU machine:
 
