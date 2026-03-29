@@ -3,7 +3,7 @@ from roberta_inference import RobertaInferencePipeline
 import os
 
 # Put your API key here for the app, or rely on the environment variable
-os.environ["GEMINI_API_KEY"] = "AIzaSyARNTpio-bsoFyRIhtfuWcCeLQ5NkxgyUY"
+os.environ["GEMINI_API_KEY"] = "YOUR_GEMINI_API_KEY"
 
 try:
     from agent import FactCheckingAgent

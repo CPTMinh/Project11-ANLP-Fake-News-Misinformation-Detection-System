@@ -15,21 +15,21 @@ Usage (from project root):
     python src/baseline_model.py --config configs/baseline_config.yaml
 """
 
-from __future__ import annotations
+from __future__ import annotations      # For Python 3.10+ type hinting of class methods
 
-import argparse
-import logging
-import pickle
-from pathlib import Path
+import argparse                         # For command-line argument parsing
+import logging                          # For logging progress and errors
+import pickle                           # For saving and loading trained models
+from pathlib import Path                # For convenient path handling  
 
-import numpy as np
-import pandas as pd
-import yaml
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import GridSearchCV
-from sklearn.pipeline import Pipeline
-from sklearn.svm import LinearSVC
+import numpy as np                      # For numerical operations
+import pandas as pd                     # For data manipulation and analysis
+import yaml                             # For loading YAML configuration files
+from sklearn.feature_extraction.text import TfidfVectorizer # For converting text to TF-IDF features
+from sklearn.linear_model import LogisticRegression         # For Logistic Regression classifier
+from sklearn.model_selection import GridSearchCV            # For hyperparameter tuning with cross-validation
+from sklearn.pipeline import Pipeline                       # For creating a machine learning pipeline
+from sklearn.svm import LinearSVC                           # For Linear Support Vector Classifier
 
 from evaluate import (
     compute_metrics,
@@ -45,19 +45,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-# ---------------------------------------------------------------------------
 # Config loading
-# ---------------------------------------------------------------------------
 
 def load_config(config_path: str | Path) -> dict:
     with open(config_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-
-# ---------------------------------------------------------------------------
 # Data loading
-# ---------------------------------------------------------------------------
 
 def load_data(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Load processed train / valid / test CSVs from config paths."""
@@ -81,10 +75,7 @@ def get_xy(
     df = df.dropna(subset=[text_col, label_col])
     return df[text_col], df[label_col].astype(int)
 
-
-# ---------------------------------------------------------------------------
 # Hyperparameter grid builder
-# ---------------------------------------------------------------------------
 
 def _build_param_grid(model_cfg: dict, prefix_tfidf: str, prefix_clf: str) -> list[dict]:
     """
@@ -113,10 +104,7 @@ def _build_param_grid(model_cfg: dict, prefix_tfidf: str, prefix_clf: str) -> li
     }
     return [{**tfidf_params, **clf_params}]
 
-
-# ---------------------------------------------------------------------------
 # Model 1: TF-IDF + Logistic Regression
-# ---------------------------------------------------------------------------
 
 class TfidfLRModel:
     """TF-IDF Vectorizer + Logistic Regression with GridSearchCV tuning."""
@@ -166,10 +154,7 @@ class TfidfLRModel:
         with open(path, "rb") as f:
             return pickle.load(f)
 
-
-# ---------------------------------------------------------------------------
 # Model 2: TF-IDF + LinearSVC
-# ---------------------------------------------------------------------------
 
 class TfidfSVMModel:
     """TF-IDF Vectorizer + LinearSVC with GridSearchCV tuning."""
@@ -219,10 +204,7 @@ class TfidfSVMModel:
         with open(path, "rb") as f:
             return pickle.load(f)
 
-
-# ---------------------------------------------------------------------------
 # End-to-end experiment runner
-# ---------------------------------------------------------------------------
 
 def run_baseline_experiment(config_path: str | Path = "configs/baseline_config.yaml") -> dict:
     """
@@ -239,7 +221,7 @@ def run_baseline_experiment(config_path: str | Path = "configs/baseline_config.y
     """
     cfg = load_config(config_path)
 
-    # ── Data ──────────────────────────────────────────────────────────────
+    # Data
     train_df, valid_df, test_df = load_data(cfg)
     text_col  = cfg["data"]["text_column"]
     label_col = cfg["data"]["label_column"]
@@ -256,7 +238,7 @@ def run_baseline_experiment(config_path: str | Path = "configs/baseline_config.y
 
     all_results: dict[str, dict] = {}
 
-    # ── Logistic Regression ───────────────────────────────────────────────
+    # Logistic Regression
     lr_model = TfidfLRModel(cfg)
     lr_model.fit(X_trainval, y_trainval)
     y_pred_lr = lr_model.predict(X_test)
@@ -279,7 +261,7 @@ def run_baseline_experiment(config_path: str | Path = "configs/baseline_config.y
     lr_errors.to_csv(results_dir / "error_analysis_lr.csv", index=False)
     logger.info("LR error analysis saved to %s", results_dir / "error_analysis_lr.csv")
 
-    # ── LinearSVC ─────────────────────────────────────────────────────────
+    # LinearSVC
     svm_model = TfidfSVMModel(cfg)
     svm_model.fit(X_trainval, y_trainval)
     y_pred_svm = svm_model.predict(X_test)
@@ -300,16 +282,12 @@ def run_baseline_experiment(config_path: str | Path = "configs/baseline_config.y
     svm_errors.to_csv(results_dir / "error_analysis_svm.csv", index=False)
     logger.info("SVM error analysis saved to %s", results_dir / "error_analysis_svm.csv")
 
-    # ── Summary ───────────────────────────────────────────────────────────
+    # Summary
     print_comparison_table(all_results)
 
     return all_results
 
-
-# ---------------------------------------------------------------------------
 # CLI entry point
-# ---------------------------------------------------------------------------
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train and evaluate baseline models")
     parser.add_argument(

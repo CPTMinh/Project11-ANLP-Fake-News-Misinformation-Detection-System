@@ -12,20 +12,17 @@ Designed for GPU training in Google Colab; can also be used for
 CPU inference on smaller batches.
 """
 
-from __future__ import annotations
+from __future__ import annotations          # For Python 3.10+ type hinting features
 
-from pathlib import Path
-from typing import Optional
+from pathlib import Path                    # For convenient path handling
+from typing import Optional                 # For type annotations
 
-import torch
-from torch import nn
-from torch.utils.data import Dataset
-from transformers import RobertaModel, RobertaTokenizer
+import torch                                # For model definition and inference
+from torch import nn                        # For neural network modules
+from torch.utils.data import Dataset        # For creating a PyTorch Dataset
+from transformers import RobertaModel, RobertaTokenizer # For the RoBERTa encoder and tokenizer
 
-
-# ---------------------------------------------------------------------------
 # Dataset
-# ---------------------------------------------------------------------------
 
 class FakeNewsDataset(Dataset):
     """
@@ -71,10 +68,7 @@ class FakeNewsDataset(Dataset):
             item["labels"] = torch.tensor(self.labels[idx], dtype=torch.long)
         return item
 
-
-# ---------------------------------------------------------------------------
 # Model
-# ---------------------------------------------------------------------------
 
 class RobertaClassifier(nn.Module):
     """
@@ -132,11 +126,8 @@ class RobertaClassifier(nn.Module):
             return loss, logits
 
         return logits
-
-
-# ---------------------------------------------------------------------------
+    
 # Convenience loader
-# ---------------------------------------------------------------------------
 
 def load_model(
     checkpoint_dir: str | Path,

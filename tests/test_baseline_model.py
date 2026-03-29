@@ -7,23 +7,20 @@ Run with:
     pytest tests/test_baseline_model.py -v
 """
 
-import numpy as np
-import pandas as pd
-import pytest
-from unittest.mock import MagicMock
+import numpy as np                  # For numerical operations
+import pandas as pd                 # For DataFrame manipulation
+import pytest                       # For testing framework
+from unittest.mock import MagicMock # For mocking file I/O and other side effects    
 
 # Allow import from src/
-import sys
+import sys                              
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from baseline_model import TfidfLRModel, TfidfSVMModel, get_xy
 from evaluate import compute_metrics, error_analysis, print_comparison_table
 
-
-# ---------------------------------------------------------------------------
 # Fixtures
-# ---------------------------------------------------------------------------
 
 MINIMAL_CFG = {
     "logistic_regression": {
@@ -83,10 +80,7 @@ def make_fake_data(n: int = 40):
         labels.append(0)
     return pd.Series(texts), pd.Series(labels)
 
-
-# ---------------------------------------------------------------------------
 # TfidfLRModel tests
-# ---------------------------------------------------------------------------
 
 class TestTfidfLRModel:
     def test_fit_predict_shape(self):
@@ -134,11 +128,7 @@ class TestTfidfLRModel:
         loaded = TfidfLRModel.load(out)
         assert isinstance(loaded, Pipeline)
 
-
-# ---------------------------------------------------------------------------
 # TfidfSVMModel tests
-# ---------------------------------------------------------------------------
-
 class TestTfidfSVMModel:
     def test_fit_predict_binary(self):
         X, y = make_fake_data()
@@ -154,10 +144,7 @@ class TestTfidfSVMModel:
         preds = model.predict(X)
         assert len(preds) == len(X)
 
-
-# ---------------------------------------------------------------------------
 # compute_metrics tests
-# ---------------------------------------------------------------------------
 
 class TestComputeMetrics:
     def test_perfect_predictions(self):
@@ -180,11 +167,7 @@ class TestComputeMetrics:
         for v in metrics.values():
             assert 0.0 <= v <= 1.0
 
-
-# ---------------------------------------------------------------------------
 # get_xy tests
-# ---------------------------------------------------------------------------
-
 class TestGetXY:
     def test_drops_nan(self):
         df = pd.DataFrame({
@@ -200,10 +183,7 @@ class TestGetXY:
         _, y = get_xy(df, "text", "label")
         assert y.dtype == int
 
-
-# ---------------------------------------------------------------------------
 # error_analysis tests
-# ---------------------------------------------------------------------------
 
 class TestErrorAnalysis:
     def setup_method(self):
@@ -230,10 +210,7 @@ class TestErrorAnalysis:
         assert "true_label"      in result.columns
         assert "predicted_label" in result.columns
 
-
-# ---------------------------------------------------------------------------
 # print_comparison_table tests
-# ---------------------------------------------------------------------------
 
 class TestPrintComparisonTable:
     def test_does_not_raise(self, capsys):

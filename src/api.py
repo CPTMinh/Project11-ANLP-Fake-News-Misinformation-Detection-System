@@ -1,16 +1,16 @@
-import logging
-from contextlib import asynccontextmanager
-from typing import Dict, Any
+import logging                                  # For logging progress and errors
+from contextlib import asynccontextmanager      # For managing startup and shutdown of the FastAPI app
+from typing import Dict, Any                    # For type annotations
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from fastapi import FastAPI, HTTPException      # For building the API and handling HTTP exceptions
+from pydantic import BaseModel, Field           # For defining data models for request and response validation
 
-from .roberta_inference import RobertaInferencePipeline
+from .roberta_inference import RobertaInferencePipeline # Custom module for RoBERTa inference
 
 logger = logging.getLogger(__name__)
 
 # --- Global State for the Model ---
-# This ensures the model is loaded only once when the server starts
+# Ensures the model is loaded only once when the server starts
 models = {}
 
 @asynccontextmanager

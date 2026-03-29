@@ -9,11 +9,11 @@ Usage:
     python data/download_liar.py --output_dir path/to/raw
 """
 
-import argparse
-import logging
-import zipfile
-from pathlib import Path
-import urllib.request
+import argparse                 # For command-line argument parsing
+import logging                  # For logging progress and errors
+import zipfile                  # For handling zip files
+from pathlib import Path        # For convenient path handling
+import urllib.request           # For downloading files from the web
 
 logging.basicConfig(
     level=logging.INFO, 

@@ -23,21 +23,21 @@ Output format:
     }
 """
 
-from __future__ import annotations
+from __future__ import annotations              # For Python 3.10+ type hinting features
 
-import argparse
-import json
-import logging
-import sys
-from pathlib import Path
-from typing import Union
+import argparse                                 # For CLI argument parsing
+import json                                     # For pretty-printing results
+import logging                                  # For logging progress and errors
+import sys                                      # For modifying sys.path to import local modules    
+from pathlib import Path                        # For convenient path handling  
+from typing import Union                        # For type annotations 
 
-import torch
-import torch.nn.functional as F
-from transformers import RobertaTokenizer
+import torch                                    # For model inference   
+import torch.nn.functional as F                 # For softmax probabilities
+from transformers import RobertaTokenizer       # For tokenization compatible with the RoBERTa model
 
-sys.path.insert(0, str(Path(__file__).parent))
-from roberta_model import RobertaClassifier, load_model
+sys.path.insert(0, str(Path(__file__).parent))  # Ensure we can import from the current directory
+from roberta_model import RobertaClassifier, load_model # Custom module for model loading
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,10 +47,7 @@ logger = logging.getLogger(__name__)
 
 LABEL_MAP = {0: "FAKE", 1: "REAL"}
 
-
-# ---------------------------------------------------------------------------
 # Inference pipeline
-# ---------------------------------------------------------------------------
 
 class RobertaInferencePipeline:
     """
@@ -92,9 +89,7 @@ class RobertaInferencePipeline:
         self.model.eval()
         logger.info("Model loaded and ready.")
 
-    # ------------------------------------------------------------------
     # Core prediction
-    # ------------------------------------------------------------------
 
     @torch.inference_mode()
     def predict(
@@ -149,9 +144,7 @@ class RobertaInferencePipeline:
 
         return results[0] if single else results
 
-    # ------------------------------------------------------------------
     # Batch file inference
-    # ------------------------------------------------------------------
 
     def predict_from_csv(
         self,
@@ -192,10 +185,7 @@ class RobertaInferencePipeline:
 
         return df
 
-
-# ---------------------------------------------------------------------------
 # CLI entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

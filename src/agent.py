@@ -8,11 +8,11 @@ Step 2: Use a Search Tool (Wikipedia) to find real-world context.
 Step 3: Feed both pieces of evidence to an LLM (Gemini) to make a final decision.
 """
 
-import logging
-import wikipedia
-from google import genai
-import os
-from roberta_inference import RobertaInferencePipeline
+import logging                # For logging progress and errors
+import wikipedia              # For the Search Tool to retrieve facts from Wikipedia
+from google import genai      # For interacting with the new Google GenAI API
+import os                     # For environment variable access   
+from roberta_inference import RobertaInferencePipeline # Custom module for RoBERTa inference
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)

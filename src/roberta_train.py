@@ -19,17 +19,17 @@ What this script does:
   6. Evaluate on test set and print results + confusion matrix
 """
 
-from __future__ import annotations
+from __future__ import annotations      # For Python 3.10+ type hinting features
 
-import argparse
-import logging
-import sys
-from pathlib import Path
+import argparse                         # For CLI argument parsing
+import logging                          # For logging progress and errors
+import sys                              # For modifying sys.path to import local modules
+from pathlib import Path                # For convenient path handling
 
-import numpy as np
-import pandas as pd
-import torch
-import yaml
+import numpy as np                      # For numerical operations    
+import pandas as pd                     # For DataFrame manipulation    
+import torch                            # For model definition and training
+import yaml                             # For loading YAML config files
 from transformers import (
     EarlyStoppingCallback,
     RobertaTokenizer,
@@ -38,7 +38,7 @@ from transformers import (
 )
 
 # Allow running from project root OR from src/
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent))  # Ensure we can import from the current directory
 
 from roberta_model import FakeNewsDataset, RobertaClassifier
 from evaluate import (
@@ -55,19 +55,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-# ---------------------------------------------------------------------------
 # Config
-# ---------------------------------------------------------------------------
 
 def load_config(path: str | Path) -> dict:
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-
-# ---------------------------------------------------------------------------
 # Data helpers
-# ---------------------------------------------------------------------------
 
 def load_split(
     csv_path: Path,
@@ -81,10 +75,7 @@ def load_split(
     logger.info("  Loaded %d examples from %s", len(texts), csv_path.name)
     return texts, labels
 
-
-# ---------------------------------------------------------------------------
 # HuggingFace compute_metrics callback
-# ---------------------------------------------------------------------------
 
 def make_compute_metrics_fn():
     """Return a compute_metrics function compatible with HuggingFace Trainer."""
@@ -100,15 +91,11 @@ def make_compute_metrics_fn():
 
     return _compute_metrics
 
-
-# ---------------------------------------------------------------------------
 # Main training function
-# ---------------------------------------------------------------------------
-
 def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
     cfg = load_config(config_path)
 
-    # ── Device ────────────────────────────────────────────────────────────
+    # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info("Using device: %s", device.upper())
     if device == "cpu":
@@ -117,7 +104,7 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
             "Use Google Colab with GPU runtime."
         )
 
-    # ── Paths ──────────────────────────────────────────────────────────────
+    # Paths
     data_dir    = Path(cfg["data"]["processed_dir"])
     text_col    = cfg["data"]["text_column"]
     label_col   = cfg["data"]["label_column"]
@@ -127,11 +114,11 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
     results_dir = Path(cfg["output"]["results_dir"])
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    # ── Tokenizer ─────────────────────────────────────────────────────────
+    # Tokenizer
     logger.info("Loading tokenizer: %s", model_name)
     tokenizer = RobertaTokenizer.from_pretrained(model_name)
 
-    # ── Data ──────────────────────────────────────────────────────────────
+    # Data
     logger.info("Loading data splits...")
     train_texts, train_labels = load_split(data_dir / cfg["data"]["train_file"], text_col, label_col)
     valid_texts, valid_labels = load_split(data_dir / cfg["data"]["valid_file"], text_col, label_col)
@@ -141,7 +128,7 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
     valid_dataset = FakeNewsDataset(valid_texts, valid_labels, tokenizer, max_length)
     test_dataset  = FakeNewsDataset(test_texts,  test_labels,  tokenizer, max_length)
 
-    # ── Model ─────────────────────────────────────────────────────────────
+    # Model
     logger.info("Initialising model: %s", model_name)
     model = RobertaClassifier(
         model_name=model_name,
@@ -149,7 +136,7 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
         dropout=cfg["model"]["dropout"],
     )
 
-    # ── Training arguments ────────────────────────────────────────────────
+    # Training arguments
     t = cfg["training"]
     training_args = TrainingArguments(
         output_dir=cfg["output"]["checkpoint_dir"],
@@ -179,7 +166,7 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
         report_to="none",  # disable wandb unless explicitly configured
     )
 
-    # ── Trainer ───────────────────────────────────────────────────────────
+    # Trainer
     trainer = Trainer(
         model=model,
         args=training_args,
@@ -193,17 +180,17 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
         ],
     )
 
-    # ── Train ─────────────────────────────────────────────────────────────
+    # Train
     logger.info("Starting training...")
     trainer.train()
 
-    # ── Save best model ───────────────────────────────────────────────────
+    # Save best model
     logger.info("Saving best model to %s", best_dir)
     trainer.save_model(str(best_dir))
     tokenizer.save_pretrained(str(best_dir))
     logger.info("Model and tokenizer saved.")
 
-    # ── Test evaluation ───────────────────────────────────────────────────
+    # Test evaluation
     logger.info("Evaluating on test set...")
     test_output = trainer.predict(test_dataset)
     y_pred = np.argmax(test_output.predictions, axis=-1)
@@ -220,20 +207,17 @@ def train(config_path: str | Path = "configs/roberta_config.yaml") -> None:
         show=False,
     )
 
-    # ── Error analysis ────────────────────────────────────────────────────
+    # Error analysis
     test_df = pd.read_csv(data_dir / cfg["data"]["test_file"])
     test_df_clean = test_df.dropna(subset=[text_col, label_col]).reset_index(drop=True)
     errors = error_analysis(test_df_clean, y_true, y_pred, text_col="statement")
     errors.to_csv(results_dir / "error_analysis_roberta.csv", index=False)
     logger.info("Error analysis saved to %s", results_dir / "error_analysis_roberta.csv")
 
-    # ── Final comparison (RoBERTa alone here; merge with baseline results for full table) ──
+    # Final comparison (RoBERTa alone here; merge with baseline results for full table)
     print_comparison_table({"RoBERTa": metrics})
 
-
-# ---------------------------------------------------------------------------
 # CLI entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fine-tune RoBERTa for fake news detection")

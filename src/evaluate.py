@@ -11,16 +11,16 @@ Provides:
   - error_analysis()          -> DataFrame of misclassified examples
 """
 
-from __future__ import annotations
+from __future__ import annotations      # For Python 3.10+ type hinting features
 
-import logging
-from pathlib import Path
-from typing import Sequence
+import logging                          # For logging progress and errors
+from pathlib import Path                # For convenient path handling
+from typing import Sequence             # For type annotations
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
+import matplotlib.pyplot as plt         # For plotting confusion matrices
+import numpy as np                      # For numerical operations
+import pandas as pd                     # For DataFrame manipulation    
+import seaborn as sns                   # For enhanced plotting aesthetics
 from sklearn.metrics import (
     accuracy_score,
     classification_report,
@@ -35,10 +35,7 @@ logger = logging.getLogger(__name__)
 # Label display names for binary classification
 LABEL_NAMES = ["Fake (0)", "Real (1)"]
 
-
-# ---------------------------------------------------------------------------
 # Core metrics
-# ---------------------------------------------------------------------------
 
 def compute_metrics(
     y_true: Sequence[int],
@@ -78,10 +75,7 @@ def print_classification_report(
     print('=' * 60)
     print(classification_report(y_true, y_pred, target_names=["Fake", "Real"], zero_division=0))
 
-
-# ---------------------------------------------------------------------------
 # Confusion matrix
-# ---------------------------------------------------------------------------
 
 def plot_confusion_matrix(
     y_true: Sequence[int],
@@ -142,10 +136,7 @@ def plot_confusion_matrix(
         plt.show()
     plt.close(fig)
 
-
-# ---------------------------------------------------------------------------
 # Error analysis
-# ---------------------------------------------------------------------------
 
 def error_analysis(
     df: pd.DataFrame,
@@ -204,10 +195,7 @@ def error_analysis(
     )
     return error_df
 
-
-# ---------------------------------------------------------------------------
 # Comparison table
-# ---------------------------------------------------------------------------
 
 def print_comparison_table(results: dict[str, dict[str, float]]) -> None:
     """

@@ -119,6 +119,7 @@ Trained models are saved to `models/baseline_lr.pkl` and `models/baseline_svm.pk
 ### RoBERTa Fine-Tuning — GPU Required
 
 > **Recommended:** Open `notebooks/roberta_training_colab.ipynb` in [Google Colab](https://colab.research.google.com/) with a GPU runtime (T4 GPU) and run from start to end.
+> After downloading from cell 8. Download Results, extract the .zip file and put the content in the repo like this: models/roberta_best/...
 
 To train locally on a GPU machine:
 

@@ -9,12 +9,12 @@ Dataset source: https://www.cs.ucsb.edu/~william/data/liar_dataset.zip
 Expected files: train.tsv, valid.tsv, test.tsv
 """
 
-import os
-import re
-import logging
-import pandas as pd
-import numpy as np
-from pathlib import Path
+import os                       # For environment variables and path handling
+import re                       # For regular expressions in text cleaning  
+import logging                  # For logging progress and errors
+import pandas as pd             # For DataFrame manipulation
+import numpy as np              # For numerical operations
+from pathlib import Path        # For convenient path handling
 
 # Logging
 logging.basicConfig(
