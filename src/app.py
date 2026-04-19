@@ -17,13 +17,17 @@ st.set_page_config(page_title="Fake News Detector", page_icon="📰", layout="ce
 st.title("📰 Fake News & Misinformation Detector")
 st.markdown("Enter a news statement below to verify its authenticity using our fine-tuned RoBERTa model.")
 
+# Get the absolute path to the project root directory relative to app.py
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_DIR = os.path.join(BASE_DIR, "models", "roberta_best")
+
 @st.cache_resource
 def load_pipeline():
-    return RobertaInferencePipeline(checkpoint_dir="models/roberta_best", device="cpu")
+    return RobertaInferencePipeline(checkpoint_dir=MODEL_DIR, device="cpu")
 
 @st.cache_resource
 def load_agent():
-    return FactCheckingAgent(roberta_model_dir="models/roberta_best")
+    return FactCheckingAgent(roberta_model_dir=MODEL_DIR)
 
 try:
     with st.spinner("Loading Model..."):
