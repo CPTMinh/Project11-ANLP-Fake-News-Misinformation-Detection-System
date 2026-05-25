@@ -200,16 +200,6 @@ pytest tests/ -v
 
 ---
 
-## 📄 Documentation
-
-| Document | Description |
-|---|---|
-| `Business_Problem_Definition_Doc.pdf` | Business context, stakeholders, success metrics |
-| `Data_Description_Document.pdf` | Dataset, preprocessing steps, limitations |
-| `Continual_Learning_Strategy.md` | Model monitoring, retraining, and drift strategy |
-
----
-
 ## 🔑 Key Dependencies
 
 | Package | Purpose |
